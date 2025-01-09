@@ -1,7 +1,7 @@
 import {View, StyleSheet} from 'react-native';
 import PlaceList from '../components/Places_List';
 
-export default function AllPlaces(){
+export default function AllPlacesScreen(){
     return (
         <View>
             <PlaceList/>
