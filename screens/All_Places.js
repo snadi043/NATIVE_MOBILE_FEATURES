@@ -1,9 +1,10 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import PlaceList from '../components/Places_List';
 
 export default function AllPlaces(){
     return (
         <View>
-            
+            <PlaceList/>
         </View>
     );
 }
