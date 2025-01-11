@@ -30,7 +30,7 @@ export default function App() {
               title: 'Your Favorite Places',
               headerRight: ({tintColor}) => (
                 <IconButton
-                  icon="add"
+                  name='add'
                   size={24}
                   color={tintColor}
                   onPress={() => {
