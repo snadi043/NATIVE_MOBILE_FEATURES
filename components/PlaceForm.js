@@ -27,7 +27,7 @@ export default function PlaceForm(){
 
 const styles = StyleSheet.create({
     form:{
-        flex: 1,
+        // flex: 1,
         padding: 24,
     },
     label: {
