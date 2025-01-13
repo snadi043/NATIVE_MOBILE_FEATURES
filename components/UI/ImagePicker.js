@@ -62,7 +62,9 @@ export default function PickImage(){
     let imagePreview = <Text>No image found yet.</Text>
 
         if(imagePicked){
-            imagePreview = (<Image source={{ uri: imagePicked}} style={styles.image}/>);
+            imagePreview = (<Image
+            source={{ uri: imagePicked}} 
+            style={styles.image}/>);
         }
 
     return (
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: Colors.primary500,
         borderRadius: 4,
-        marginVertical: 8
-
+        marginVertical: 8,
+        overflow:'hidden'
     }
 });
