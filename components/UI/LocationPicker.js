@@ -45,7 +45,6 @@ export default function LocationPicker(){
 
     function pickMapHandler(){
         navigation.navigate('PickMap');
-        console.log('picked');
     }
 
     let content = <Text>No location found yet</Text>

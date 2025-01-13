@@ -21,16 +21,15 @@ export default function PickImage(){
     // and handle the camera functionality respectively.
     async function verifyPermission(){
 
-        if(cameraPermissionInfo.status === PermissionStatus.DENIED){
+        if(cameraPermissionInfo.status === ImagePicker.PermissionStatus.DENIED){
             Alert.alert('Permission Denied', 'The app needs you to grant permission to use your mobile camera to click images.');
             return false;
         }
 
-        if(cameraPermissionInfo.status === PermissionStatus.UNDETERMINED){
+        if(cameraPermissionInfo.status === ImagePicker.PermissionStatus.UNDETERMINED){
             const permissionResponse = await requestPermission();
             return permissionResponse.granted; // If the status is undetermined returning the default value as true to continue.
         }
-    
         return true;
     }
 
@@ -44,6 +43,7 @@ export default function PickImage(){
         const hasPermissions = await verifyPermission();
 
         if(!hasPermissions){
+            console.log(hasPermissions);
             return;
         }
 
@@ -62,6 +62,7 @@ export default function PickImage(){
     let imagePreview = <Text>No image found yet.</Text>
 
         if(imagePicked){
+            console.log(imagePicked);
             imagePreview = (<Image
             source={{ uri: imagePicked}} 
             style={styles.image}/>);
