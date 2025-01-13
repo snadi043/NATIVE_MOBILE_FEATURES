@@ -5,6 +5,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import AllPlacesScreen from './screens/All_Places';
 import AddPlacesScreen from './screens/Add_Places';
+import MapScreen from './screens/Map';
 import IconButton from './components/UI/IconButton';
 
 import { Colors } from './constants/colors';
@@ -41,13 +42,15 @@ export default function App() {
               ),
             })
             }
-            ></Stack.Screen>
+            />
           <Stack.Screen
             name="AddPlace" 
             component={AddPlacesScreen}
             options={{
               title: 'Add new place'
-            }}></Stack.Screen>
+            }}/>
+          <Stack.Screen name="PickMap" component={MapScreen}/>
+
         </Stack.Navigator>
       </NavigationContainer>
     </>

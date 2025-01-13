@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {View, Text, Alert, Image, StyleSheet} from 'react-native';
 import OutlinedButton from "./OutlinedButton";
 import { Colors } from '../../constants/colors';
@@ -7,6 +8,8 @@ import * as Location from 'expo-location';
 import getUserLocation from '../../utilities/location';
 
 export default function LocationPicker(){
+
+    const navigation = useNavigation();
 
     const [locationPicked, setLocationPicked] = useState();
 
@@ -41,7 +44,8 @@ export default function LocationPicker(){
     }
 
     function pickMapHandler(){
-
+        navigation.navigate('PickMap');
+        console.log('picked');
     }
 
     let content = <Text>No location found yet</Text>
