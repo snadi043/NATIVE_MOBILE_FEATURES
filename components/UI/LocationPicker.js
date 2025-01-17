@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useEffect, useState } from 'react';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import {View, Text, Alert, Image, StyleSheet} from 'react-native';
 import OutlinedButton from "./OutlinedButton";
 import { Colors } from '../../constants/colors';
@@ -11,9 +11,27 @@ export default function LocationPicker(){
 
     const navigation = useNavigation();
 
+    const route = useRoute();
+
+    // useIsFoused is an hook which helps to render different content based on the existing foucus of the state.
+    // Here useIsFocused is used to re-render the component and display the savedUserLocation as a preview by using the data from MapScreen.
+    const isFoused = useIsFocused(); // returns boolean value true || false
+
     const [locationPicked, setLocationPicked] = useState();
 
     const [locationStatus, requestLocationPermission] = Location.useForegroundPermissions();
+
+    //useEffect hook is used to re-run the code and updating the state whenever the dependencies changes.
+    useEffect(() => {
+        if(isFoused && route.params){
+            const userPickedMap = {
+                lat: route.params.pickedLat,
+                lng: route.params.pickedLng,
+            }   
+            setLocationPicked(userPickedMap);
+            }
+        },[isFoused, route]
+    );
 
         async function verifyPermissions(){
             if(locationStatus.status === Location.PermissionStatus.DENIED){
