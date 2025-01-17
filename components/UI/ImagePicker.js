@@ -1,7 +1,6 @@
 // Keep the imports from the expo-image-picker in the same format to keep the app out of errors.
 
 import * as ImagePicker from 'expo-image-picker';
-import {PermissionStatus} from 'expo-image-picker';
 
 import {View, Text, Alert, Image, StyleSheet} from 'react-native';
 
@@ -41,9 +40,9 @@ export default function PickImage({onPickImage}){
     async function clickImageHandler(){
         //Storing the result of VerifyPermissions function in a constant.
         const hasPermissions = await verifyPermission();
+        console.log(hasPermissions);
 
         if(!hasPermissions){
-            console.log(hasPermissions);
             return;
         }
 
@@ -52,10 +51,10 @@ export default function PickImage({onPickImage}){
             aspect: [16,9],
             quality: 0.5,
         });
-        // console.log(image.assets.indexOf);
+        console.log(image.assets[0].uri);
         if(!image.canceled){
-            setImagePicked(image.uri);
-            onPickImage(image.uri);
+            setImagePicked(image.assets[0].uri);
+            onPickImage(image.assets[0].uri);
         }
     }
 

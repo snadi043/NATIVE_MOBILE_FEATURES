@@ -5,18 +5,24 @@ import { Colors } from '../constants/colors';
 import PickImage from './UI/ImagePicker';
 import LocationPicker from './UI/LocationPicker';
 import Button from './UI/Button';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function PlaceForm(){
     const [pickedLocation, setPickedLocation] = useState();
     const [pickedImage, setPickedImage] = useState();
     const [enteredTitle, setEnteredTitle] = useState();
 
+    const navigation = useNavigation();
+
     function titleChangeHandler(enteredText){
         setEnteredTitle(enteredText);
     }
 
     function savePlaceHandler(){
+        navigation.goBack('AllPlaces');
         console.log(enteredTitle, pickedImage, pickedLocation);
+
     }
 
     function pickImageHandler(userPickedImage){
