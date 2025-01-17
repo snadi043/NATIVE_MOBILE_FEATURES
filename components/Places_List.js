@@ -25,7 +25,8 @@ export default function PlaceList({places}){
 
 const styles = StyleSheet.create({
     fallbackContainer: {
-        flex: 1,
+        // flex: 1,
+        marginTop: 400,
         justifyContent: 'center',
         alignItems: 'center',
     },
