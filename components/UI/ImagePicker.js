@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Colors } from '../../constants/colors';
 import OutlinedButton from './OutlinedButton';
 
-export default function PickImage(){
+export default function PickImage({onPickImage}){
     const [imagePicked, setImagePicked] = useState(null);
 
     // The ImagePicker package provides the hook useCameraPermissions to verify the status 
@@ -55,8 +55,8 @@ export default function PickImage(){
         // console.log(image.assets.indexOf);
         if(!image.canceled){
             setImagePicked(image.uri);
+            onPickImage(image.uri);
         }
-
     }
 
     let imagePreview = <Text>No image found yet.</Text>

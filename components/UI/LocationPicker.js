@@ -7,7 +7,7 @@ import { Colors } from '../../constants/colors';
 import * as Location from 'expo-location';
 import getUserLocation from '../../utilities/location';
 
-export default function LocationPicker(){
+export default function LocationPicker({onPickLocation}){
 
     const navigation = useNavigation();
 
@@ -32,6 +32,11 @@ export default function LocationPicker(){
             }
         },[isFoused, route]
     );
+
+    //Re-run the component when ever the dependency locationPicked and onPickLocation changes.
+    useEffect(() => {
+        onPickLocation(locationPicked);
+    }, [locationPicked, onPickLocation]);
 
         async function verifyPermissions(){
             if(locationStatus.status === Location.PermissionStatus.DENIED){
@@ -58,6 +63,7 @@ export default function LocationPicker(){
             lat: location.coords.latitude, 
             lng: location.coords.longitude
             }
+        
         );
     }
 

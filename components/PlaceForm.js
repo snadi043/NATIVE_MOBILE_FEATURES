@@ -7,11 +7,26 @@ import LocationPicker from './UI/LocationPicker';
 import Button from './UI/Button';
 
 export default function PlaceForm(){
+    const [pickedLocation, setPickedLocation] = useState();
+    const [pickedImage, setPickedImage] = useState();
     const [enteredTitle, setEnteredTitle] = useState();
 
     function titleChangeHandler(enteredText){
         setEnteredTitle(enteredText);
     }
+
+    function savePlaceHandler(){
+        console.log(enteredTitle, pickedImage, pickedLocation);
+    }
+
+    function pickImageHandler(userPickedImage){
+        setPickedImage(userPickedImage);
+    }
+
+    function pickLocationHandler(userPickedLocation){
+        setPickedLocation(userPickedLocation);
+    }
+
     return (
         <ScrollView style={styles.form}>
              <View style={styles.inputContainer}>
@@ -22,9 +37,9 @@ export default function PlaceForm(){
                     style={styles.input}
                 />
              </View>
-             <PickImage/>
-             <LocationPicker/>
-             <Button>Add Place</Button>
+             <PickImage onPickImager={pickImageHandler}/>
+             <LocationPicker onPickLocation={pickLocationHandler}/>
+             <Button onPress={savePlaceHandler}>Add Place</Button>
         </ScrollView>
       )
 }
