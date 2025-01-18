@@ -1,27 +1,26 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {View, Text, StyleSheet, ScrollView, TextInput} from 'react-native';
-
 import { Colors } from '../constants/colors';
+
 import PickImage from './UI/ImagePicker';
 import LocationPicker from './UI/LocationPicker';
 import Button from './UI/Button';
-import { useNavigation } from '@react-navigation/native';
+import Places from '../models/Places';
 
 
-export default function PlaceForm(){
+export default function PlaceForm({onFormSubmit}){
     const [pickedLocation, setPickedLocation] = useState();
     const [pickedImage, setPickedImage] = useState();
     const [enteredTitle, setEnteredTitle] = useState();
-
-    const navigation = useNavigation();
 
     function titleChangeHandler(enteredText){
         setEnteredTitle(enteredText);
     }
 
     function savePlaceHandler(){
-        navigation.goBack('AllPlaces');
-        console.log(enteredTitle, pickedImage, pickedLocation);
+        const formData = new Places(enteredTitle, pickedImage, pickedLocation);
+        onFormSubmit(formData);
+        console.log(formData);
 
     }
 
@@ -29,9 +28,9 @@ export default function PlaceForm(){
         setPickedImage(userPickedImage);
     }
 
-    function pickLocationHandler(userPickedLocation){
+    const pickLocationHandler = useCallback((userPickedLocation) => {
         setPickedLocation(userPickedLocation);
-    }
+    }, []);
 
     return (
         <ScrollView style={styles.form}>
