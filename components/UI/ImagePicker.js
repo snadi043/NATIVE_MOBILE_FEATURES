@@ -1,7 +1,6 @@
 // Keep the imports from the expo-image-picker in the same format to keep the app out of errors.
 
 import * as ImagePicker from 'expo-image-picker';
-import {PermissionStatus} from 'expo-image-picker';
 
 import {View, Text, Alert, Image, StyleSheet} from 'react-native';
 
@@ -9,7 +8,7 @@ import { useState } from 'react';
 import { Colors } from '../../constants/colors';
 import OutlinedButton from './OutlinedButton';
 
-export default function PickImage(){
+export default function PickImage({onPickImage}){
     const [imagePicked, setImagePicked] = useState(null);
 
     // The ImagePicker package provides the hook useCameraPermissions to verify the status 
@@ -21,16 +20,15 @@ export default function PickImage(){
     // and handle the camera functionality respectively.
     async function verifyPermission(){
 
-        if(cameraPermissionInfo.status === PermissionStatus.DENIED){
+        if(cameraPermissionInfo.status === ImagePicker.PermissionStatus.DENIED){
             Alert.alert('Permission Denied', 'The app needs you to grant permission to use your mobile camera to click images.');
             return false;
         }
 
-        if(cameraPermissionInfo.status === PermissionStatus.UNDETERMINED){
+        if(cameraPermissionInfo.status === ImagePicker.PermissionStatus.UNDETERMINED){
             const permissionResponse = await requestPermission();
             return permissionResponse.granted; // If the status is undetermined returning the default value as true to continue.
         }
-    
         return true;
     }
 
@@ -42,6 +40,7 @@ export default function PickImage(){
     async function clickImageHandler(){
         //Storing the result of VerifyPermissions function in a constant.
         const hasPermissions = await verifyPermission();
+        console.log(hasPermissions);
 
         if(!hasPermissions){
             return;
@@ -52,17 +51,20 @@ export default function PickImage(){
             aspect: [16,9],
             quality: 0.5,
         });
-        // console.log(image.assets.indexOf);
+        console.log(image.assets[0].uri);
         if(!image.canceled){
-            setImagePicked(image.uri);
+            setImagePicked(image.assets[0].uri);
+            onPickImage(image.assets[0].uri);
         }
-
     }
 
     let imagePreview = <Text>No image found yet.</Text>
 
         if(imagePicked){
-            imagePreview = (<Image source={{ uri: imagePicked}} style={styles.image}/>);
+            console.log(imagePicked);
+            imagePreview = (<Image
+            source={{ uri: imagePicked}} 
+            style={styles.image}/>);
         }
 
     return (
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: Colors.primary500,
         borderRadius: 4,
-        marginVertical: 8
-
+        marginVertical: 8,
+        overflow:'hidden'
     }
 });
