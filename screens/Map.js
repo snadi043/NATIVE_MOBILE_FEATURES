@@ -5,7 +5,6 @@ import IconButton from "../components/UI/IconButton";
 
 export default function MapScreen({navigation}){
 
-
     const [selectedLocation, setSelectedLocation] = useState(null);
     
     const initialRegion = {
@@ -16,13 +15,12 @@ export default function MapScreen({navigation}){
           };
 
     function selectLocationHandler(event){
+        console.log(event);
         const lat = event.nativeEvent.coordinate.latitude;
-        const lng = event.nativeEvent.coordinate.longitude;
-        // console.log(lat, lng);
-
-    // console.log(selectedLocation);
-
-        setSelectedLocation({latitude: lat, longitude: lng});
+        const lng = event.nativeEvent.coordinate.longitude;        
+        
+        //The object here which is to be set has to have the properties only as lat and lng.
+        setSelectedLocation({lat: lat, lng: lng});
     }
 
     //useCallback() hooks is used in order to avoid unnecessary function calls often, rather by using 
@@ -44,13 +42,13 @@ export default function MapScreen({navigation}){
     // runs the cleans up function every time the dependencies changes and brfore the DOM gets rendered on the screen.
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerRight: ({tintColor}) => {
+            headerRight: ({tintColor}) => (
                 <IconButton 
                     name="save" 
                     color={tintColor} 
                     size={24} 
                     onPress={savedLocationPickerHandler}/>
-            }
+            ),
         });
     }, [navigation, savedLocationPickerHandler]);
 

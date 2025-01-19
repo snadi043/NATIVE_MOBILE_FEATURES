@@ -4,8 +4,12 @@ import {View, Text, Alert, Image, StyleSheet} from 'react-native';
 import OutlinedButton from "./OutlinedButton";
 import { Colors } from '../../constants/colors';
 
-import * as Location from 'expo-location';
-import getUserLocation from '../../utilities/location';
+import {
+    getCurrentPositionAsync,
+    useForegroundPermissions,
+    PermissionStatus,
+  } from 'expo-location';
+import  { getUserLocation, getAddress } from '../../utilities/location';
 
 export default function LocationPicker({onPickLocation}){
 
@@ -19,7 +23,7 @@ export default function LocationPicker({onPickLocation}){
 
     const [locationPicked, setLocationPicked] = useState();
 
-    const [locationStatus, requestLocationPermission] = Location.useForegroundPermissions();
+    const [locationStatus, requestLocationPermission] = useForegroundPermissions();
 
     //useEffect hook is used to re-run the code and updating the state whenever the dependencies changes.
     useEffect(() => {
@@ -35,15 +39,21 @@ export default function LocationPicker({onPickLocation}){
 
     //Re-run the component when ever the dependency locationPicked and onPickLocation changes.
     useEffect(() => {
-        onPickLocation(locationPicked);
+        async function handleAddress(){
+            if(locationPicked){
+                const address = await getAddress(locationPicked.lat, locationPicked.lng);
+                onPickLocation({...locationPicked, address: address});
+            }
+        };
+        handleAddress();
     }, [locationPicked, onPickLocation]);
 
         async function verifyPermissions(){
-            if(locationStatus.status === Location.PermissionStatus.DENIED){
+            if(locationStatus.status === PermissionStatus.DENIED){
                 Alert.alert('Permission Denied', 'App need you to allow location permissions to have better experience while using it.');
                 return false;
             }
-            if(locationStatus.status === Location.PermissionStatus.UNDETERMINED){
+            if(locationStatus.status === PermissionStatus.UNDETERMINED){
                 const locationResponse = await requestLocationPermission();
                 return locationResponse.granted;
             }
@@ -56,14 +66,13 @@ export default function LocationPicker({onPickLocation}){
         if(!hasPermissions){
             return;
         }
-        const location = await Location.getCurrentPositionAsync();
+        const location = await getCurrentPositionAsync();
         console.log(location);
         setLocationPicked(
             {
             lat: location.coords.latitude, 
             lng: location.coords.longitude
             }
-        
         );
     }
 
