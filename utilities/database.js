@@ -5,12 +5,13 @@
 
 
 import * as SQLite from 'expo-sqlite';
+import Places from '../models/Places';
 
 const db = SQLite.openDatabaseSync('places.db');
 
 export function init(){
     const promise = new Promise((resolve, reject) => {
-        db.withExclusiveTransactionAsync((tnx) => {
+        db.withTransactionAsync((tnx) => {
             tnx.execAsync(`CREATED DATABASE IF NOT EXISTS places (
             id INTEGER PRIMARY KEY NOT NULL,
             title STRING NOT NULL,
@@ -32,7 +33,7 @@ export function init(){
 
 export function insertPlace(place){
     const promise = new Promise((resolve, reject) => {
-        db.withExclusiveTransactionAsync((tnx) => {
+        db.withTransactionAsync((tnx) => {
             tnx.execSync(`INSERT INTO places (
                 title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)`,
             [
@@ -55,4 +56,34 @@ export function insertPlace(place){
     return promise;
 }
 
+export function getPlaces(){
+    const promise = new Promise((resolve, reject) => {
+        db.withTransactionAsync((tnx) => {
+            tnx.execSync('SELECT * FROM places', 
+            [],
+            (_, result) => {
+                const places = [];
+                for (const dp of result.rows._array){
+                    places.push(
+                        new Places(
+                            dp.title,
+                            dp.imageUri,
+                            {
+                                address: dp.address,
+                                lat: dp.lat,
+                                lng: dp.lng,
+                            },
+                            dp.id
+                        )
+                    );
+                }
+                resolve(places);    
+            },
+            (_, error) => {
+                reject(error);
+            }
+        )
+        })
+    })
+}
     

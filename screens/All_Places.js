@@ -1,27 +1,22 @@
 import { useEffect, useState } from 'react';
-import {View, StyleSheet} from 'react-native';
 import PlaceList from '../components/Places_List';
 import { useIsFocused } from '@react-navigation/native';
+import { getPlaces } from '../utilities/database';
 
-export default function AllPlacesScreen({route}){
+export default function AllPlacesScreen(){
 
     const [loadedPlaces, setLoadedPlaces] = useState([]);
     const isFoused = useIsFocused();
+
     useEffect(() => {
-        if(isFoused && route.params){
-            setLoadedPlaces((prevPlaces) => [
-                ...prevPlaces, route.params.place
-        ]);
+        async function loadPlaces(){
+            const places = await getPlaces();
+            setLoadedPlaces(places);
         }
-    }, [route, isFoused]);
+        if(isFoused){
+            loadPlaces();
+        }
+    }, [isFoused]);
 
-    return (
-        <View>
-            <PlaceList places={loadedPlaces}/>
-        </View>
-    );
+    return <PlaceList places={loadedPlaces}/>;
 }
-
-const styles = StyleSheet.create({
-
-});

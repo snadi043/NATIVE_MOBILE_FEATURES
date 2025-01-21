@@ -4,7 +4,7 @@ import {Colors} from '../constants/colors';
 export default function PlaceItem({onSelect, place}){
     return <Pressable 
             onPress={onSelect}
-            style={({pressed}) => [styles.pressed, styles.item]}>
+            style={({pressed}) => [pressed && styles.pressed, styles.item]}>
         <Image 
             source={{uri: place.imageUri}}
             style={styles.image}
