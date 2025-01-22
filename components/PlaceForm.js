@@ -9,19 +9,12 @@ import Places from '../models/Places';
 
 
 export default function PlaceForm({onFormSubmit}){
-    const [pickedLocation, setPickedLocation] = useState();
+    const [pickedLocation, setPickedLocation] = useState('');
     const [pickedImage, setPickedImage] = useState();
     const [enteredTitle, setEnteredTitle] = useState();
 
     function titleChangeHandler(enteredText){
         setEnteredTitle(enteredText);
-    }
-
-    function savePlaceHandler(){
-        const formData = new Places(enteredTitle, pickedImage, pickedLocation);
-        onFormSubmit(formData);
-        console.log(formData);
-
     }
 
     function pickImageHandler(userPickedImage){
@@ -32,6 +25,13 @@ export default function PlaceForm({onFormSubmit}){
         setPickedLocation(userPickedLocation);
     }, []);
 
+    function savePlaceHandler(){
+        const formData = new Places(enteredTitle, pickedImage, pickedLocation);
+        onFormSubmit(formData);
+        console.log(formData);
+
+    }
+    
     return (
         <ScrollView style={styles.form}>
              <View style={styles.inputContainer}>

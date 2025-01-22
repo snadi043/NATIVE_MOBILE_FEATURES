@@ -84,6 +84,23 @@ export function getPlaces(){
             }
         )
         })
-    })
+    });
+    return promise;
 }
-    
+
+
+function fetchPlaceDetails(id){
+    const promise = new Promise((resolve, reject) => {
+        db.withTransactionAsync((tnx) => {
+            tnx.execAsync('SELECT * FROM places HWERE id = ?', [id],
+                (_, result) => {
+                    resolve(result.rows._array[0]);
+                },
+                (_, error) => {
+                    reject(error);
+                }
+            )
+        })
+    });
+    return promise;
+}

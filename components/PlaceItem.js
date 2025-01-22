@@ -3,7 +3,7 @@ import {Colors} from '../constants/colors';
 
 export default function PlaceItem({onSelect, place}){
     return <Pressable 
-            onPress={onSelect}
+            onPress={onSelect.bind(this, place.id)}
             style={({pressed}) => [pressed && styles.pressed, styles.item]}>
         <Image 
             source={{uri: place.imageUri}}

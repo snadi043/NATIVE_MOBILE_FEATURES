@@ -13,6 +13,7 @@ import { Colors } from './constants/colors';
 import { init } from './utilities/database';
 
 import * as SplashScreen from 'expo-splash-screen';
+import PlaceDetailsScreen from './screens/Place_Details';
 
 export default function App() {
 
@@ -81,6 +82,9 @@ export default function App() {
               title: 'Add new place'
             }}/>
           <Stack.Screen name="PickMap" component={MapScreen}/>
+          <Stack.Screen name="PlaceDetails" component={PlaceDetailsScreen} options={{
+            title: 'Loading Place...',
+          }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </>
