@@ -34,7 +34,7 @@ export function init(){
 export function insertPlace(place){
     const promise = new Promise((resolve, reject) => {
         db.withTransactionAsync((tnx) => {
-            tnx.execSync(`INSERT INTO places (
+            tnx.execAsync(`INSERT INTO places (
                 title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?)`,
             [
                 place.title,
@@ -59,7 +59,7 @@ export function insertPlace(place){
 export function getPlaces(){
     const promise = new Promise((resolve, reject) => {
         db.withTransactionAsync((tnx) => {
-            tnx.execSync('SELECT * FROM places', 
+            tnx.execAsync('SELECT * FROM places', 
             [],
             (_, result) => {
                 const places = [];
@@ -94,7 +94,9 @@ function fetchPlaceDetails(id){
         db.withTransactionAsync((tnx) => {
             tnx.execAsync('SELECT * FROM places HWERE id = ?', [id],
                 (_, result) => {
-                    resolve(result.rows._array[0]);
+                    const dbPlaces = result.rows._array[0];
+                    const place = new Places(dbPlaces.title, dbPlaces.imageUri, {lat: dbPlaces.lat, lng: dbPlaces.lng, address: dbPlaces.address}, dbPlaces.id);
+                    resolve(place);
                 },
                 (_, error) => {
                     reject(error);

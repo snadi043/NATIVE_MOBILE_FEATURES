@@ -13,15 +13,16 @@ import  { getUserLocation, getAddress } from '../../utilities/location';
 
 export default function LocationPicker({onPickLocation}){
 
-    const navigation = useNavigation();
-
-    const route = useRoute();
+    const [locationPicked, setLocationPicked] = useState();
 
     // useIsFoused is an hook which helps to render different content based on the existing foucus of the state.
     // Here useIsFocused is used to re-render the component and display the savedUserLocation as a preview by using the data from MapScreen.
     const isFoused = useIsFocused(); // returns boolean value true || false
+    
+    const navigation = useNavigation();
+    const route = useRoute();
 
-    const [locationPicked, setLocationPicked] = useState();
+
 
     const [locationStatus, requestLocationPermission] = useForegroundPermissions();
 
@@ -49,14 +50,16 @@ export default function LocationPicker({onPickLocation}){
     }, [locationPicked, onPickLocation]);
 
         async function verifyPermissions(){
-            if(locationStatus.status === PermissionStatus.DENIED){
-                Alert.alert('Permission Denied', 'App need you to allow location permissions to have better experience while using it.');
-                return false;
-            }
             if(locationStatus.status === PermissionStatus.UNDETERMINED){
                 const locationResponse = await requestLocationPermission();
                 return locationResponse.granted;
             }
+            
+            if(locationStatus.status === PermissionStatus.DENIED){
+                Alert.alert('Permission Denied', 'App need you to allow location permissions to have better experience while using it.');
+                return false;
+            }
+            
             return true;
         }
     

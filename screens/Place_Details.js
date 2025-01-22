@@ -8,7 +8,10 @@ export default function PlaceDetailsScreen({route, navigation}){
     const [fetchedPlace, setFetchedPlace] = useState();
 
     function detailsHandler(){
-        
+        navigation.navigate('PickMap',{
+            initialLat: fetchedPlace.location.lat,
+            initialLng: fetchedPlace.location.lng
+        });
     } 
 
     const selectedPlaceId = route.params.placeId;

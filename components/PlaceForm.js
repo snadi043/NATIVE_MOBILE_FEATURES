@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import {View, Text, StyleSheet, ScrollView, TextInput} from 'react-native';
 import { Colors } from '../constants/colors';
 
-import PickImage from './UI/ImagePicker';
+import ImagePick from './UI/ImagePick';
 import LocationPicker from './UI/LocationPicker';
 import Button from './UI/Button';
 import Places from '../models/Places';
@@ -17,12 +17,14 @@ export default function PlaceForm({onFormSubmit}){
         setEnteredTitle(enteredText);
     }
 
-    function pickImageHandler(userPickedImage){
-        setPickedImage(userPickedImage);
+    function pickImageHandler(imageUri){
+        console.log(imageUri);
+        setPickedImage(imageUri);
     }
-
-    const pickLocationHandler = useCallback((userPickedLocation) => {
-        setPickedLocation(userPickedLocation);
+    // useCallback() is the hook which is helpful to use the state from the cache 
+    // instead of re-rendering the components very often unless the dependenices get changed.
+    const pickLocationHandler = useCallback((location) => {
+        setPickedLocation(location);
     }, []);
 
     function savePlaceHandler(){
@@ -31,7 +33,7 @@ export default function PlaceForm({onFormSubmit}){
         console.log(formData);
 
     }
-    
+
     return (
         <ScrollView style={styles.form}>
              <View style={styles.inputContainer}>
@@ -42,7 +44,7 @@ export default function PlaceForm({onFormSubmit}){
                     style={styles.input}
                 />
              </View>
-             <PickImage onPickImager={pickImageHandler}/>
+             <ImagePick onPickImage={pickImageHandler}/>
              <LocationPicker onPickLocation={pickLocationHandler}/>
              <Button onPress={savePlaceHandler}>Add Place</Button>
         </ScrollView>

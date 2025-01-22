@@ -3,19 +3,26 @@ import { Alert, StyleSheet } from "react-native";
 import MapView, {Marker} from "react-native-maps";
 import IconButton from "../components/UI/IconButton";
 
-export default function MapScreen({navigation}){
+export default function MapScreen({navigation, route}){
 
-    const [selectedLocation, setSelectedLocation] = useState(null);
-    
-    const initialRegion = {
-            latitude: 37.78825,
-            longitude: -122.4324,
+    const initialLocation = route.params && {
+        lat: route.params.initialLat,
+        lng: route.params.initialLng
+    }
+
+    const [selectedLocation, setSelectedLocation] = useState(initialLocation);
+
+    const region = {
+            latitude: initialLocation ? initialLocation.lat : 37.78825,
+            longitude: initialLocation ? initialLocation.lng : -122.4324,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           };
 
     function selectLocationHandler(event){
-        console.log(event);
+        if(initialLocation){
+            return;
+        }
         const lat = event.nativeEvent.coordinate.latitude;
         const lng = event.nativeEvent.coordinate.longitude;        
         
@@ -41,6 +48,11 @@ export default function MapScreen({navigation}){
     // the layout adjustments before the components gets renderd on the screen and 
     // runs the cleans up function every time the dependencies changes and brfore the DOM gets rendered on the screen.
     useLayoutEffect(() => {
+
+        if(initialLocation){
+            return;
+        }
+
         navigation.setOptions({
             headerRight: ({tintColor}) => (
                 <IconButton 
@@ -50,10 +62,10 @@ export default function MapScreen({navigation}){
                     onPress={savedLocationPickerHandler}/>
             ),
         });
-    }, [navigation, savedLocationPickerHandler]);
+    }, [navigation, savedLocationPickerHandler, initialLocation]);
 
    return <MapView
-        initialRegion={initialRegion} 
+        initialRegion={region} 
         style={styles.map}
         onPress={selectLocationHandler}>
         {
